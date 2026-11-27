@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chinar Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&family=Noto+Nastaliq+Urdu:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: snow-white page, one bold chinar-red accent for the daily challenge and primary buttons; typographic subject tiles; one-column mobile flow. */
+:root{
+  --snow:#F6F2EA; --paper:#FFFFFF; --ink:#1D2540; --ink2:#59617E; --line:#E3DCCF;
+  --chinar:#D8431B; --chinar-d:#A83012; --dal:#0E7C86; --saffron:#F0A920; --leaf:#2F8F57; --bad:#C23B2E;
+  --eng:#0E7C86; --urd:#2F7A4F; --mat:#3B4BA8; --sci:#B5651D; --ai:#7A3FA0;
+  --display:"Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Nunito","Segoe UI",system-ui,sans-serif;
+  --urdu:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;
+  --r:18px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--snow);color:var(--ink);font-family:var(--body);font-weight:600;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--saffron);outline-offset:2px}
+#app{max-width:720px;margin:0 auto;padding:12px 16px 40px;display:flex;flex-direction:column;gap:16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.3px;cursor:pointer;background:none;border:0;padding:6px 0}
+.brand svg{width:30px;height:30px}
+.top-r{display:flex;gap:8px;align-items:center}
+.chip{display:flex;align-items:center;gap:8px;background:var(--paper);border:2px solid var(--line);border-radius:999px;padding:6px 14px;min-height:44px;font-weight:800}
+.chip small{font-weight:700;color:var(--ink2)}
+.iconbtn{width:44px;height:44px;border-radius:50%;border:2px solid var(--line);background:var(--paper);font-size:18px;display:grid;place-items:center;padding:0}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.1;text-wrap:balance}
+h1{font-size:34px;font-weight:800}
+h2{font-size:26px;font-weight:800}
+h3{font-size:20px;font-weight:700}
+p{margin:0}
+.muted{color:var(--ink2)}
+.card{background:var(--paper);border:2px solid var(--line);border-radius:var(--r);padding:16px}
+.hello{display:flex;flex-direction:column;gap:10px}
+.stats{display:flex;gap:16px;flex-wrap:wrap;font-weight:800}
+.stats span b{font-family:var(--display);font-size:22px;margin-right:4px}
+.star{color:var(--saffron)}
+.bar{height:14px;background:#EFE8DA;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--saffron),var(--chinar));border-radius:99px;transition:width .5s}
+.daily{background:var(--chinar);color:#fff;border:0;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.daily h2{font-size:30px}
+.daily p{opacity:.95}
+.daily::after{content:"";position:absolute;right:-30px;top:-30px;width:150px;height:150px;background:rgba(255,255,255,.12);clip-path:polygon(50% 0,60% 22%,82% 12%,76% 36%,100% 38%,82% 55%,96% 78%,70% 74%,62% 100%,50% 82%,38% 100%,30% 74%,4% 78%,18% 55%,0 38%,24% 36%,18% 12%,40% 22%)}
+.btn{border:0;border-radius:14px;padding:12px 20px;min-height:50px;font-family:var(--display);font-weight:700;font-size:19px;background:var(--ink);color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.25);transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+.btn.light{background:#fff;color:var(--chinar-d)}
+.btn.red{background:var(--chinar)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line);box-shadow:none}
+.btn.small{min-height:40px;padding:6px 14px;font-size:16px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{background:var(--paper);border:2px solid var(--line);border-radius:var(--r);padding:14px;text-align:left;display:flex;flex-direction:column;gap:4px;min-height:150px;box-shadow:0 4px 0 var(--line);transition:transform .08s}
+.tile:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.tile .g{font-family:var(--display);font-weight:800;font-size:54px;line-height:1;color:var(--c)}
+.tile .g.u{font-family:var(--urdu);font-size:46px;line-height:1.4}
+.tile h3{margin-top:auto}
+.tile small{color:var(--ink2);font-weight:700}
+.sec-t{display:flex;align-items:baseline;justify-content:space-between}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{padding:6px 12px;border-radius:99px;background:#FFF3D6;border:2px solid #F3D68B;font-weight:800;font-size:15px}
+.badge.off{background:#F1ECE1;border-color:var(--line);color:#9A9484}
+.back{align-self:flex-start;background:none;border:0;font-weight:800;color:var(--ink2);padding:6px 0;min-height:40px}
+.mode{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;background:var(--paper);border:2px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:0 4px 0 var(--line)}
+.mode:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.mode b{font-family:var(--display);font-size:21px;display:block}
+.mode .go{font-family:var(--display);font-weight:800;font-size:15px;color:#fff;background:var(--c);border-radius:99px;padding:6px 14px;white-space:nowrap}
+.list{display:flex;flex-direction:column;gap:12px}
+.qhead{display:flex;align-items:center;gap:12px}
+.qhead .bar{flex:1}
+.qhead small{font-weight:800;color:var(--ink2)}
+.qbox{display:flex;flex-direction:column;gap:14px}
+.qtext{font-family:var(--display);font-weight:700;font-size:23px;line-height:1.2}
+.big{font-family:var(--display);font-weight:800;font-size:64px;line-height:1.1;text-align:center;padding:6px 0;word-break:break-word}
+.big.u{font-family:var(--urdu);font-size:58px;line-height:1.7}
+.big.tiles{font-size:40px;letter-spacing:6px;color:var(--chinar)}
+.opts{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:520px){.opts{grid-template-columns:1fr 1fr}}
+.opt{min-height:56px;padding:12px 14px;border:2px solid var(--line);background:var(--paper);border-radius:14px;text-align:left;font-weight:700;box-shadow:0 3px 0 var(--line)}
+.opt.u{font-family:var(--urdu);font-size:26px;line-height:1.8;text-align:center}
+.opt.ok{background:#DDF3E5;border-color:var(--leaf);animation:pop .3s}
+.opt.no{background:#FBE0DC;border-color:var(--bad)}
+.opt.dim{opacity:.55}
+@keyframes pop{50%{transform:scale(1.03)}}
+.ansrow{display:flex;gap:10px}
+.ansrow input{flex:1;min-width:0;font:inherit;font-family:var(--display);font-weight:700;font-size:24px;padding:10px 14px;border:2px solid var(--ink);border-radius:14px;background:#fff;color:var(--ink)}
+.ansrow input.ok{border-color:var(--leaf);background:#DDF3E5}
+.ansrow input.no{border-color:var(--bad);background:#FBE0DC}
+.fb{padding:12px 14px;border-radius:14px;font-weight:700}
+.fb.ok{background:#DDF3E5}
+.fb.no{background:#FBE0DC}
+.result{text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center}
+.result .stars{font-size:58px;letter-spacing:6px;color:var(--saffron)}
+.result .stars .off{color:#E2DCCB}
+.result .score{font-family:var(--display);font-size:46px;font-weight:800}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+/* maze */
+.maze{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;width:100%;max-width:330px;margin:0 auto;background:var(--ink);padding:4px;border-radius:14px}
+.cell{aspect-ratio:1;border-radius:8px;background:#F8F4EA;display:grid;place-items:center;font-size:30px}
+.cell.w{background:#3B4570}
+.cell.s{background:#FFF1C9}
+.prog{display:flex;flex-wrap:wrap;gap:8px;min-height:50px;padding:8px;border:2px dashed var(--line);border-radius:14px;align-items:center}
+.step{border:0;background:var(--mat);color:#fff;border-radius:10px;padding:6px 12px;min-height:40px;font-family:var(--display);font-weight:800;font-size:20px}
+.pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pad .btn{padding:8px;font-size:26px}
+/* teach machine */
+.view{background:#EEF3FB;border:2px solid #CBD8EE;border-radius:14px;padding:10px 14px;font-weight:700;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px}
+.robot{display:flex;gap:12px;align-items:flex-start}
+.robot .face{font-size:42px;line-height:1}
+.speech{background:#F4EFFA;border:2px solid #DCCDEB;border-radius:14px;padding:10px 14px;flex:1}
+.credit{display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;padding:18px 0 4px;border-top:2px solid var(--line);margin-top:8px}
+.credit svg{width:26px;height:26px;margin-bottom:4px}
+.credit span{font-family:var(--display);font-size:20px;font-weight:700}
+.credit small{color:var(--ink2);font-weight:700}
+.slip{background:#FFF6DD;border:2px dashed #E6C46A;border-radius:14px;padding:10px 18px;font-family:var(--display);font-size:22px}
+.slip small{font-family:var(--body);font-size:15px;color:var(--ink2);font-weight:700}
+.tblwrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:16px}
+.tbl th,.tbl td{text-align:left;padding:8px 10px;border-bottom:2px solid var(--line);white-space:nowrap}
+.tbl th{font-family:var(--display);font-size:15px;color:var(--ink2)}
+.hrow{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:2px solid var(--line)}
+.hrow .hs{text-align:right;font-weight:800;white-space:nowrap}
+.sheet textarea,.card textarea{font:inherit;font-weight:600;padding:10px 12px;border:2px solid var(--line);border-radius:12px;width:100%;resize:vertical;color:var(--ink);background:#fff}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:99px;font-weight:800;z-index:60;max-width:90%;text-align:center}
+#modal{position:fixed;inset:0;background:rgba(29,37,64,.55);display:grid;place-items:center;padding:16px;z-index:50}
+#modal[hidden]{display:none}
+.sheet{background:var(--paper);border-radius:22px;padding:18px;width:100%;max-width:420px;max-height:88%;overflow:auto;display:flex;flex-direction:column;gap:12px}
+.kid{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:2px solid var(--line);border-radius:14px;background:#fff;width:100%;text-align:left}
+.kid.on{border-color:var(--chinar);background:#FFF1EC}
+.sheet input{font:inherit;font-weight:700;padding:10px 14px;border:2px solid var(--ink);border-radius:12px;min-width:0;flex:1}
+footer{color:var(--ink2);font-size:14px;text-align:center}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <button class="brand" data-a="home" aria-label="Home">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><polygon fill="#D8431B" points="50,4 58,26 80,14 74,38 98,40 80,56 94,80 68,74 60,98 50,80 40,98 32,74 6,80 20,56 2,40 26,38 20,14 42,26"/><rect x="47" y="70" width="6" height="26" rx="3" fill="#A83012"/></svg>
+      <span>Chinar Academy</span>
+    </button>
+    <div class="top-r">
+      <button class="chip" id="kidchip" data-a="kids" aria-label="Switch learner"></button>
+      <button class="iconbtn" id="mutebtn" data-a="mute" aria-label="Sound on or off"></button>
+    </div>
+  </header>
+  <main id="main"></main>
+  <footer>Progress is saved on this device, separately for each learner.</footer>
+</div>
+<div id="modal" hidden></div>
+
+<script>
+"use strict";
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ri = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+const shuffle = a => { const x=a.slice(); for(let i=x.length-1;i>0;i--){const j=ri(0,i);[x[i],x[j]]=[x[j],x[i]];} return x; };
+const pickN = (a,n) => shuffle(a).slice(0,n);
+const mc = (q,a,w,e,x) => Object.assign({t:"mc",q,a,o:[a,...w],e:e||""}, x||{});
+const tx = (q,a,e,x) => Object.assign({t:"tx",q,a:String(a),e:e||""}, x||{});
+
+/* ---------- storage ---------- */
+const KEY = "chinar-academy-v1";
+let mem = null;
+const store = {
+  get(){ try{ const v=localStorage.getItem(KEY); return v?JSON.parse(v):mem; }catch(e){ return mem; } },
+  set(v){ mem=v; try{ localStorage.setItem(KEY,JSON.stringify(v)); }catch(e){} }
+};
+const newProfile = () => ({xp:0,stars:0,streak:0,last:"",best:{},badges:[],rounds:0,maze:[],subs:[],log:[]});
+let state = store.get() || {current:null, profiles:{}, mute:false};
+function fixState(){
+  const P = state.profiles = state.profiles || {};
+  if(P["Player 1"] && !P["Player 1"].rounds && !P["Player 1"].xp) delete P["Player 1"];
+  Object.keys(P).forEach(k=>{ P[k] = Object.assign(newProfile(), P[k]); P[k].log = P[k].log || []; });
+  if(!state.current || !P[state.current]) state.current = null;
+}
+fixState();
+const prof = () => state.profiles[state.current];
+const save = () => store.set(state);
+const lvlOf = xp => Math.floor(xp/100)+1;
+const TITLES = ["Cub","Explorer","Thinker","Builder","Scientist","Engineer","Inventor","Genius","Master","Legend"];
+const titleOf = xp => TITLES[Math.min(lvlOf(xp)-1, TITLES.length-1)];
+
+/* ---------- sound ---------- */
+let ac = null;
+function tone(f,d,when,type){ try{
+  ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+  const o=ac.createOscillator(), g=ac.createGain(); o.type=type||"sine"; o.frequency.value=f;
+  g.gain.setValueAtTime(.12,ac.currentTime+when); g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+when+d);
+  o.connect(g); g.connect(ac.destination); o.start(ac.currentTime+when); o.stop(ac.currentTime+when+d+.02);
+}catch(e){} }
+function sfx(k){ if(state.mute) return;
+  if(k==="ok"){tone(660,.12,0);tone(880,.18,.1);}
+  else if(k==="bad"){tone(220,.25,0,"triangle");}
+  else if(k==="step"){tone(500,.06,0);}
+  else if(k==="win"){[523,659,784,1047].forEach((f,i)=>tone(f,.2,i*.12));}
+}
+function toast(m){ const t=document.createElement("div"); t.className="toast"; t.textContent=m; document.body.appendChild(t); setTimeout(()=>t.remove(),2400); }
+
+/* ---------- question banks ---------- */
+const ENG = [
+ mc("What is the opposite of ancient?","modern",["old","huge","dusty"],"Ancient means very old, so modern is the opposite."),
+ mc("Which word means the same as enormous?","huge",["tiny","quiet","slow"],"Enormous and huge both mean very big."),
+ mc("What is the plural of child?","children",["childs","childrens","childes"],"Child is an irregular noun. The plural is children."),
+ mc("What is the past tense of teach?","taught",["teached","teachd","tought"],"Teach becomes taught."),
+ mc("Choose the correct word: She ___ to school every day.","goes",["go","going","gone"],"With she, he or it, the present tense verb takes -es: goes."),
+ mc("Which word is an adverb in: The tortoise walked slowly.","slowly",["tortoise","walked","The"],"An adverb tells how an action is done. Slowly describes walked."),
+ mc("What is the opposite of generous?","selfish",["kind","wealthy","cheerful"],"A generous person gives freely. A selfish person does not."),
+ mc("A group of wolves is called a ___.","pack",["herd","swarm","school"],"Wolves live and hunt in a pack."),
+ mc("What does the idiom a piece of cake mean?","very easy",["tasty food","a birthday","a small gift"],"If a task is a piece of cake, it is very easy."),
+ mc("What does break the ice mean?","start a friendly conversation",["crack a frozen lake","stop a fight","feel very cold"],"Breaking the ice means making people feel relaxed when they first meet."),
+ mc("Which spelling is correct?","necessary",["neccessary","necesary","necessery"],"Necessary has one c and two s: ne-ces-sa-ry."),
+ mc("Which word means the same as brave?","courageous",["timid","lazy","gentle"],"Courageous means brave."),
+ mc("Choose the correct word: I can ___ the mountains from my window.","see",["sea","seen","scene"],"See is a verb. Sea is the ocean. They sound the same but mean different things."),
+ mc("Choose the correct word: ___ going to the park after school.","They're",["Their","There","Thare"],"They're is short for they are."),
+ mc("What is the plural of mouse?","mice",["mouses","mices","meese"],"Mouse becomes mice."),
+ mc("Which of these is a proper noun?","Srinagar",["city","river","mountain"],"A proper noun is the special name of a person or place, so it starts with a capital letter."),
+ mc("He has ___ his homework.","finished",["finish","finishing","finishs"],"Has or have is followed by the past participle: finished."),
+ mc("What is the opposite of victory?","defeat",["success","triumph","glory"],"Victory means winning. Defeat means losing."),
+ mc("Which punctuation mark ends a question?","?",[".","!",","],"A question ends with a question mark."),
+ mc("The cat sat ___ the mat.","on",["and","very","happy"],"On is a preposition. It shows where the cat sat."),
+ mc("A flock of ___.","birds",["lions","fish","bees"],"We say a flock of birds, a pride of lions, a school of fish and a swarm of bees."),
+ mc("Find the adjective: The brave soldier won the race.","brave",["soldier","won","race"],"An adjective describes a noun. Brave describes soldier."),
+ mc("What does reluctant mean?","unwilling",["excited","sleepy","clever"],"If you are reluctant, you do not want to do something."),
+ mc("What is the opposite of expand?","shrink",["grow","stretch","spread"],"Expand means to get bigger. Shrink means to get smaller."),
+ mc("Which sentence is correct?","Neither of the boys was late.",["Neither of the boys were late.","Neither of the boy was late.","Neither of boys was late."],"Neither is singular, so it takes was."),
+];
+const WORDS_SPELL = [
+ ["elephant","The largest animal that lives on land"],["library","A place full of books you can borrow"],["mountain","Very high land, like the Pir Panjal"],
+ ["computer","A machine that follows instructions"],["beautiful","Very pleasing to look at"],["adventure","An exciting journey"],
+ ["chocolate","A sweet treat made from cocoa"],["umbrella","It keeps you dry in the rain"],["kingdom","A land ruled by a king or queen"],
+ ["triangle","A shape with three sides"],["telescope","It helps you see faraway stars"],["butterfly","An insect with colourful wings"],
+ ["vegetable","Carrots and spinach are examples"],["calendar","It shows days, weeks and months"],["treasure","Pirates bury it"],
+ ["dolphin","An intelligent sea animal that jumps"],["volcano","A mountain that can erupt"],["diamond","A very hard, sparkling gem"],
+ ["orchard","A place where apple trees grow"],["blanket","You pull it over you in winter"]
+];
+function scramble(w){ let s; do{ s=shuffle(w.split("")).join(""); }while(s===w); return s.toUpperCase().split("").join(" "); }
+function genSpell(){ return pickN(WORDS_SPELL,10).map(([w,h])=>tx("Unscramble the letters. Hint: "+h,w,"The word is "+w+".",{big:scramble(w),tiles:true,ph:"Type the word"})); }
+
+const LETTERS = [["ا","Alif"],["ب","Bay"],["پ","Pay"],["ت","Tay"],["ٹ","Ttay"],["ث","Say"],["ج","Jeem"],["چ","Chay"],["ح","Bari Hay"],["خ","Khay"],["د","Daal"],["ڈ","Ddaal"],["ذ","Zaal"],["ر","Ray"],["ز","Zay"],["س","Seen"],["ش","Sheen"],["ص","Suad"],["ض","Zuad"],["ط","Toay"],["ظ","Zoay"],["ع","Ain"],["غ","Ghain"],["ف","Fay"],["ق","Qaaf"],["ک","Kaaf"],["گ","Gaaf"],["ل","Laam"],["م","Meem"],["ن","Noon"],["و","Wao"],["ہ","Choti Hay"],["ی","Choti Yay"]];
+function genAlpha(){ return pickN(LETTERS,10).map(([l,n])=>mc("What is the name of this letter?",n,pickN(LETTERS.filter(x=>x[1]!==n),3).map(x=>x[1]),l+" is called "+n+".",{big:l,bigu:true})); }
+
+const UW = [["🍎","سیب","seb","apple"],["📖","کتاب","kitaab","book"],["💧","پانی","paani","water"],["🌙","چاند","chaand","moon"],["☀️","سورج","sooraj","sun"],["🌸","پھول","phool","flower"],["🥛","دودھ","doodh","milk"],["🌳","درخت","darakht","tree"],["🐟","مچھلی","machhli","fish"],["🏠","گھر","ghar","house"],["🐱","بلی","billi","cat"],["🐦","چڑیا","chidiya","bird"],["✏️","قلم","qalam","pen"],["⭐","ستارہ","sitara","star"],["🚪","دروازہ","darwaza","door"]];
+function genUrduWords(){ return pickN(UW,10).map(([em,ur,ro,en])=>{
+  if(Math.random()<.5) return mc("Which Urdu word matches the picture?",ur,pickN(UW.filter(x=>x[1]!==ur),3).map(x=>x[1]),ur+" ("+ro+") means "+en+".",{big:em,ou:true});
+  return mc("What does this Urdu word mean?",en,pickN(UW.filter(x=>x[3]!==en),3).map(x=>x[3]),ur+" ("+ro+") means "+en+".",{big:ur,bigu:true});
+}); }
+
+const KASH = [
+ mc("Which lake in Srinagar is famous for its shikaras?","Dal Lake",["Wular Lake","Pangong Lake","Chilika Lake"],"Dal Lake in Srinagar is known for shikara boats and floating gardens."),
+ mc("What is a kangri?","A clay pot with hot coals kept under the pheran",["A kind of bread","A traditional boat","A woollen cap"],"A kangri keeps people warm in the cold Kashmiri winter."),
+ mc("What is a pheran?","A long, loose woollen cloak",["A fire pot","A type of tea","A mountain pass"],"The pheran is worn in winter, often with a kangri inside."),
+ mc("Kahwa, the Kashmiri tea, is flavoured with which precious spice?","Saffron",["Vanilla","Cinnamon only","Black pepper only"],"Kahwa is green tea with saffron, spices and often almonds."),
+ mc("Which place near Srinagar is famous for growing saffron?","Pampore",["Gulmarg","Sonmarg","Pahalgam"],"Pampore, in Pulwama district, is the saffron bowl of Kashmir."),
+ mc("Which river flows through Srinagar?","Jhelum",["Ganga","Yamuna","Narmada"],"The Jhelum flows through the heart of Srinagar."),
+ mc("What does Sonmarg mean?","Meadow of gold",["Valley of snow","Lake of stars","Garden of roses"],"Sonmarg is a high-altitude meadow."),
+ mc("What do Kashmiris call their language?","Koshur",["Dogri","Ladakhi","Punjabi"],"Koshur is the Kashmiri language."),
+ mc("What is Wazwan?","A multi-course Kashmiri feast",["A winter festival","A kind of shawl","A mountain"],"Wazwan is a grand meal cooked by master chefs called wazas."),
+ mc("Which tree turns red and orange in a Kashmiri autumn?","Chinar",["Pine","Willow","Cedar"],"Chinar leaves turn fiery colours in autumn and give this academy its name."),
+ mc("What is Chillai Kalan?","The 40-day period of the harshest winter",["A harvest festival","A mountain pass","A type of bread"],"Chillai Kalan runs from about 21 December to 29 January."),
+ mc("Pashmina wool comes from which animal?","Changthangi goat",["Sheep","Yak","Camel"],"The fine undercoat of the Changthangi goat makes pashmina."),
+ mc("Which is a famous Mughal garden in Srinagar?","Shalimar Bagh",["Lodhi Garden","Brindavan Gardens","Rock Garden"],"Shalimar Bagh was built by Emperor Jahangir on the shore of Dal Lake."),
+ mc("Which high pass connects Srinagar with Ladakh?","Zojila",["Khardung La","Rohtang","Nathu La"],"Zojila links the Kashmir Valley to Ladakh."),
+ mc("The Hangul, a rare red deer, lives in which national park?","Dachigam",["Corbett","Kaziranga","Ranthambore"],"Dachigam National Park near Srinagar is the home of the Hangul."),
+];
+
+const SCI = [
+ {tp:"earth",...mc("Which planet is closest to the Sun?","Mercury",["Venus","Mars","Earth"],"Mercury orbits closest to the Sun.")},
+ {tp:"earth",...mc("Which planet is called the Red Planet?","Mars",["Jupiter","Venus","Saturn"],"Iron oxide dust gives Mars its red colour.")},
+ {tp:"earth",...mc("What is the largest planet in our solar system?","Jupiter",["Saturn","Earth","Neptune"],"Jupiter is more than 11 times wider than Earth.")},
+ {tp:"earth",...mc("What causes day and night?","Earth spinning on its axis",["Earth going around the Sun","The Moon blocking the Sun","The Sun moving around Earth"],"Earth rotates once about every 24 hours.")},
+ {tp:"earth",...mc("What causes the seasons?","The tilt of Earth's axis",["Distance from the Sun only","The Moon's pull","Clouds"],"Earth's tilt changes how directly sunlight reaches each part of the planet.")},
+ {tp:"earth",...mc("How long does Earth take to go once around the Sun?","About 365 days",["30 days","24 hours","10 years"],"That is one year.")},
+ {tp:"earth",...mc("Which layer of Earth do we live on?","Crust",["Mantle","Outer core","Inner core"],"The crust is the thin, solid outer layer.")},
+ {tp:"earth",...mc("How are snowflakes formed?","Water vapour turns into ice crystals in cold clouds",["Rain freezes near the ground","Clouds are cut into pieces","Wind blows ice from mountains"],"Ice crystals grow in clouds and join together as they fall.")},
+ {tp:"life",...mc("How do plants make their food?","Photosynthesis",["Respiration","Digestion","Evaporation"],"Plants use sunlight, water and carbon dioxide to make food.")},
+ {tp:"life",...mc("Which gas do plants take in for photosynthesis?","Carbon dioxide",["Oxygen","Nitrogen","Hydrogen"],"Plants absorb carbon dioxide and release oxygen.")},
+ {tp:"life",...mc("Which organ pumps blood around the body?","Heart",["Lungs","Liver","Kidney"],"The heart is a muscle that works like a pump.")},
+ {tp:"life",...mc("How many bones does an adult human have?","206",["106","306","150"],"Babies are born with more bones, which fuse as they grow.")},
+ {tp:"life",...mc("What is the largest organ of the human body?","Skin",["Liver","Brain","Stomach"],"Skin covers the whole body and protects it.")},
+ {tp:"life",...mc("Which vitamin does our body make with sunlight?","Vitamin D",["Vitamin A","Vitamin C","Vitamin K"],"Sunlight on the skin helps the body make Vitamin D for strong bones.")},
+ {tp:"life",...mc("Animals that eat only plants are called ___.","herbivores",["carnivores","omnivores","predators"],"Cows and goats are herbivores.")},
+ {tp:"life",...mc("Which part of a plant absorbs water from the soil?","Roots",["Leaves","Flowers","Stem"],"Roots take in water and minerals.")},
+ {tp:"life",...mc("How many legs does an insect have?","Six",["Four","Eight","Ten"],"All insects have six legs. Spiders have eight, so they are not insects.")},
+ {tp:"life",...mc("Trees like the chinar that shed their leaves in autumn are called ___.","deciduous",["evergreen","aquatic","parasitic"],"Deciduous trees drop leaves to save energy in winter.")},
+ {tp:"life",...mc("Which blood cells help fight germs?","White blood cells",["Red blood cells","Platelets","Plasma"],"White blood cells are the body's defenders.")},
+ {tp:"matter",...mc("At what temperature does water boil at sea level?","100 °C",["50 °C","0 °C","212 °C"],"Water boils at 100 °C (212 °F) at sea level. It boils at a lower temperature on high mountains.")},
+ {tp:"matter",...mc("Which state of matter has a fixed shape?","Solid",["Liquid","Gas","Vapour"],"The particles of a solid are packed tightly in place.")},
+ {tp:"matter",...mc("Liquid water turning into water vapour is called ___.","evaporation",["condensation","freezing","melting"],"Heat turns liquid water into vapour.")},
+ {tp:"matter",...mc("Which of these is a good conductor of electricity?","Copper",["Rubber","Wood","Plastic"],"Electric wires are made of copper.")},
+ {tp:"matter",...mc("Which force pulls objects towards the Earth?","Gravity",["Friction","Magnetism","Sound"],"Gravity makes things fall.")},
+ {tp:"matter",...mc("Why do we see lightning before we hear thunder?","Light travels faster than sound",["Thunder happens first","Our eyes are faster than ears","Clouds hide the sound"],"Light is hundreds of thousands of times faster than sound.")},
+ {tp:"matter",...mc("Sound cannot travel through ___.","a vacuum",["water","air","steel"],"Sound needs particles to carry it. Space is almost empty.")},
+ {tp:"matter",...mc("What is the chemical formula of water?","H₂O",["CO₂","O₂","NaCl"],"Two hydrogen atoms and one oxygen atom make one water molecule.")},
+ {tp:"matter",...mc("Which is a renewable source of energy?","Solar energy",["Coal","Petrol","Diesel"],"The Sun will keep shining, but coal and petrol will run out.")},
+ {tp:"matter",...mc("A magnet attracts which of these?","Iron nail",["Plastic spoon","Wooden stick","Glass marble"],"Magnets attract iron, nickel and cobalt.")},
+ {tp:"env",...mc("Which gas is the main cause of global warming?","Carbon dioxide",["Oxygen","Helium","Nitrogen"],"Carbon dioxide traps heat in the atmosphere.")},
+ {tp:"env",...mc("Reduce, Reuse and ___.","Recycle",["Remove","Replace","Repeat"],"The three Rs help reduce waste.")},
+ {tp:"env",...mc("Which layer of the atmosphere protects us from harmful ultraviolet rays?","Ozone layer",["Clouds","Troposphere only","Magnetic field"],"The ozone layer absorbs most of the Sun's UV radiation.")},
+ {tp:"env",...mc("What is the national animal of India?","Tiger",["Lion","Elephant","Leopard"],"The Bengal tiger is India's national animal.")},
+ {tp:"env",...mc("What is the national bird of India?","Peacock",["Sparrow","Parrot","Eagle"],"The Indian peafowl is the national bird.")},
+ {tp:"env",...mc("What happens when glaciers melt faster than usual?","Sea levels rise",["Deserts get rain","Days get longer","Mountains grow"],"Extra water flows into rivers and oceans.")},
+ {tp:"env",...mc("Which mountain range lies to the north of India?","Himalayas",["Western Ghats","Aravalli","Vindhya"],"The Himalayas include the Pir Panjal range around Kashmir.")},
+];
+
+const AIQ = [
+ mc("What does AI stand for?","Artificial Intelligence",["Automatic Internet","Advanced Input","Animated Image"],"AI means computers doing tasks that normally need human thinking."),
+ mc("What does an AI learn patterns from?","Data",["Magic","Sleep","Batteries"],"AI is trained on lots of examples, which we call data."),
+ mc("A set of step-by-step instructions to solve a problem is called an ___.","algorithm",["avatar","antenna","album"],"Recipes and computer programs are both algorithms."),
+ mc("Finding and fixing a mistake in a program is called ___.","debugging",["deleting","downloading","decorating"],"A mistake in code is called a bug."),
+ mc("Computers store information using which two digits?","0 and 1",["1 and 2","5 and 10","A and B"],"Binary uses only 0 and 1."),
+ mc("Repeating the same instructions many times in code is called a ___.","loop",["leak","link","lock"],"Instead of writing 'step forward' ten times, a loop repeats it for you."),
+ mc("If an AI is trained on unfair data, its answers may be ___.","biased",["perfect","faster","invisible"],"If the examples are unfair, the AI can copy that unfairness."),
+ mc("Which of these should you NEVER share with a chatbot or stranger online?","Home address and passwords",["Your favourite colour","A maths question","The name of a book"],"Keep private details private. Ask a parent if you are unsure."),
+ mc("Does AI always give the correct answer?","No, it can make mistakes",["Yes, always","Only on weekdays","Only for maths"],"Always double-check important facts in a book or with a teacher."),
+ mc("A prompt is ___.","the question or instruction you give an AI",["a kind of virus","a computer screen","a battery"],"A clear prompt helps the AI give a better answer."),
+ mc("'If it is raining, take an umbrella' is an example of ___.","a decision (if statement)",["a loop","a variable","a bug"],"Programs use if statements to choose what to do."),
+ mc("A variable in programming is like ___.","a labelled box that stores a value",["a broken wire","a printer","a mouse"],"For example, score = 10 stores the number 10 in a box called score."),
+ mc("Which of these is an input device?","Keyboard",["Monitor","Speaker","Printer"],"Input devices send information into the computer."),
+ mc("Which of these learns from examples to get better?","A spam filter",["A ruler","A light switch","A paper clip"],"A spam filter learns from emails people mark as spam."),
+ mc("Why does the order of steps matter in a program?","Computers follow instructions exactly in order",["Computers guess what you mean","Order never matters","Computers skip the first step"],"If you tell a robot to put on shoes before socks, that is exactly what it will do."),
+ mc("What do we call it when AI learns to spot cats by looking at many labelled cat photos?","Machine learning",["Machine cooking","Cat cloning","Screen painting"],"Machine learning means learning from examples instead of fixed rules."),
+ mc("The CPU is often called the computer's ___.","brain",["battery","speaker","window"],"The CPU processes instructions."),
+ mc("What is a pixel?","The smallest dot in a digital picture",["A kind of robot","A computer virus","A keyboard key"],"A picture on a screen is made of thousands of tiny pixels."),
+];
+
+/* ---------- maths ---------- */
+const MG = {
+ easy:[
+  ()=>{const a=ri(11,69),b=ri(11,29);return tx(a+" + "+b+" = ?",a+b,a+" + "+b+" = "+(a+b),{n:1});},
+  ()=>{const a=ri(40,99),b=ri(11,39);return tx(a+" − "+b+" = ?",a-b,a+" − "+b+" = "+(a-b),{n:1});},
+  ()=>{const a=ri(2,10),b=ri(2,10);return tx(a+" × "+b+" = ?",a*b,a+" × "+b+" = "+a*b,{n:1});},
+  ()=>{const a=ri(11,50),b=ri(10,40);return tx("__ + "+a+" = "+(a+b),b,"Subtract: "+(a+b)+" − "+a+" = "+b,{n:1});},
+  ()=>{const b=ri(2,9),c=ri(2,9);return tx(b*c+" ÷ "+b+" = ?",c,b+" × "+c+" = "+b*c+", so "+b*c+" ÷ "+b+" = "+c,{n:1});},
+ ],
+ medium:[
+  ()=>{const a=ri(12,99),b=ri(3,9);return tx(a+" × "+b+" = ?",a*b,a+" × "+b+" = "+a*b,{n:1});},
+  ()=>{const b=ri(3,12),c=ri(6,15);return tx(b*c+" ÷ "+b+" = ?",c,b*c+" ÷ "+b+" = "+c,{n:1});},
+  ()=>{const d=[2,3,4,5,10][ri(0,4)],k=ri(2,12);return tx("What is 1/"+d+" of "+d*k+"?",k,d*k+" ÷ "+d+" = "+k,{n:1});},
+  ()=>{const l=ri(5,20),w=ri(3,15);return tx("A rectangle is "+l+" cm long and "+w+" cm wide. What is its perimeter in cm?",2*(l+w),"Perimeter = 2 × ("+l+" + "+w+") = "+2*(l+w),{n:1});},
+  ()=>{const a=ri(250,899),b=ri(110,99+100);return tx(a+" + "+b+" = ?",a+b,a+" + "+b+" = "+(a+b),{n:1});},
+  ()=>{const p=ri(5,25),n=ri(3,12);return tx("One notebook costs ₹"+p+". How many rupees do "+n+" notebooks cost?",p*n,p+" × "+n+" = "+p*n,{n:1});},
+ ],
+ hard:[
+  ()=>{const a=ri(12,25),b=ri(11,19);return tx(a+" × "+b+" = ?",a*b,a+" × "+b+" = "+a*b,{n:1});},
+  ()=>{const p=[10,20,25,50,75][ri(0,4)],n=ri(2,20)*20;return tx("What is "+p+"% of "+n+"?",p*n/100,p+"% of "+n+" = "+p*n/100,{n:1});},
+  ()=>{const a=ri(2,20),b=ri(2,9),c=ri(2,9);return tx("Solve using BODMAS: "+a+" + "+b+" × "+c,a+b*c,"Multiply first: "+b+" × "+c+" = "+b*c+". Then add "+a+" to get "+(a+b*c)+".",{n:1});},
+  ()=>{const x=ri(3,20),m=ri(2,9),c=ri(1,20);return tx("Find x: "+m+"x + "+c+" = "+(m*x+c),x,"Subtract "+c+": "+m+"x = "+m*x+". Divide by "+m+": x = "+x+".",{n:1});},
+  ()=>{const b=2*ri(3,10),h=ri(3,12);return tx("A triangle has base "+b+" cm and height "+h+" cm. What is its area in square cm?",b*h/2,"Area = ½ × "+b+" × "+h+" = "+b*h/2,{n:1});},
+  ()=>{const s=ri(30,80),t=ri(2,6);return tx("A bus travels at "+s+" km per hour for "+t+" hours. How many km does it cover?",s*t,"Distance = speed × time = "+s+" × "+t+" = "+s*t,{n:1});},
+  ()=>{const a=ri(101,499),b=ri(11,99),c=ri(2,9);return tx("What is "+a+" + "+b+" × "+c+"?",a+b*c,"Multiply first: "+b+" × "+c+" = "+b*c+". Then add "+a+" to get "+(a+b*c)+".",{n:1});},
+ ]
+};
+function genMath(level){ const out=[]; const g=MG[level]; let pool=[]; while(out.length<10){ if(!pool.length) pool=shuffle(g); out.push(pool.pop()()); } return out; }
+
+/* ---------- subjects ---------- */
+const sciMode = (id,title,desc,tp) => ({id,title,desc,gen:()=>pickN(tp?SCI.filter(q=>q.tp===tp):SCI,10)});
+const SUBJECTS = {
+ english:{name:"English",glyph:"Aa",c:"--eng",blurb:"Words, grammar, spelling",modes:[
+   {id:"vocab",title:"Word Power",desc:"Meanings, opposites and grammar",gen:()=>pickN(ENG,10)},
+   {id:"spell",title:"Unscramble",desc:"Fix the jumbled word",gen:genSpell}]},
+ urdu:{name:"Urdu & Kashmir",glyph:"ا",u:1,c:"--urd",blurb:"Alphabet, words, our valley",modes:[
+   {id:"alpha",title:"Urdu Alphabet",desc:"Learn the name of each letter",gen:genAlpha},
+   {id:"words",title:"Urdu Words",desc:"Match pictures and words",gen:genUrduWords},
+   {id:"kashmir",title:"Know Kashmir",desc:"Food, places, culture, nature",gen:()=>pickN(KASH,10)}]},
+ maths:{name:"Maths",glyph:"×÷",c:"--mat",blurb:"Three levels, type your answer",modes:[
+   {id:"easy",title:"Level 1: Warm-up",desc:"Add, subtract, tables",gen:()=>genMath("easy")},
+   {id:"medium",title:"Level 2: Challenge",desc:"Bigger numbers, fractions, perimeter",gen:()=>genMath("medium")},
+   {id:"hard",title:"Level 3: Champion",desc:"Percentages, BODMAS, equations",gen:()=>genMath("hard")}]},
+ science:{name:"Science & EVS",glyph:"H₂O",c:"--sci",blurb:"Earth, life, matter, environment",modes:[
+   sciMode("mix","Mixed Bag","Questions from every topic",null),
+   sciMode("earth","Earth & Space","Planets, seasons, snow","earth"),
+   sciMode("life","Living World","Body, plants, animals","life"),
+   sciMode("matter","Matter & Energy","Heat, force, light, sound","matter"),
+   sciMode("env","Our Environment","Climate, wildlife, India","env")]},
+ ai:{name:"AI & Coding",glyph:"01",c:"--ai",blurb:"Quiz, robot maze, teach a robot",modes:[
+   {id:"quiz",title:"AI & Code Quiz",desc:"Algorithms, data, safe use",gen:()=>pickN(AIQ,10)},
+   {id:"maze",title:"Robot Maze",desc:"Write steps to reach the star",special:"maze"},
+   {id:"teach",title:"Teach a Robot",desc:"Train a robot to name fruit and veg",special:"teach"}]}
+};
+const ORDER = ["english","urdu","maths","science","ai"];
+
+function dailyQs(){
+  const one = a => a[ri(0,a.length-1)];
+  return [one(ENG), one([...genAlpha(),...genUrduWords(),...KASH]), genMath("medium")[0], one(SCI), one(AIQ)];
+}
+
+/* ---------- game state ---------- */
+let view = {n:"home"};
+let run = null;
+let mz = null;
+let tm = null;
+
+function today(){ const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function yesterday(){ const d=new Date(); d.setDate(d.getDate()-1); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function touchStreak(p){ const t=today(); if(p.last===t) return; p.streak = (p.last===yesterday()) ? p.streak+1 : 1; p.last=t; }
+const BADGES = {
+  first:["First round","Finish any round"],
+  perfect:["Perfect","Score 100% in a round"],
+  streak3:["3-day streak","Learn 3 days in a row"],
+  lvl5:["Level 5","Reach level 5"],
+  allsub:["All rounder","Play every subject"],
+  coder:["Coder","Finish 3 maze levels"],
+  star25:["25 stars","Earn 25 stars"]
+};
+function awardBadges(p){ const got=[]; const add=k=>{ if(!p.badges.includes(k)){p.badges.push(k);got.push(BADGES[k][0]);} };
+  if(p.rounds>=1) add("first"); if(p.streak>=3) add("streak3"); if(lvlOf(p.xp)>=5) add("lvl5");
+  if(p.subs.length>=5) add("allsub"); if(p.maze.length>=3) add("coder"); if(p.stars>=25) add("star25"); return got; }
+function addXp(n){ const p=prof(); const before=lvlOf(p.xp); p.xp+=n; touchStreak(p); const up=lvlOf(p.xp)>before; const nb=awardBadges(p); save(); return {up,nb}; }
+
+/* ---------- views ---------- */
+function topbar(){ const p=state.current?prof():null; $("#kidchip").innerHTML = p ? esc(state.current)+" <small>Lv "+lvlOf(p.xp)+"</small>" : "Who is playing?"; $("#mutebtn").textContent = state.mute ? "🔇" : "🔊"; }
+function render(){
+  if(!state.current && view.n!=="records") view={n:"welcome"};
+  topbar();
+  const m=$("#main");
+  if(view.n==="welcome") m.innerHTML=welcomeView();
+  else if(view.n==="records") m.innerHTML=recordsView();
+  else if(view.n==="home") m.innerHTML=homeView();
+  else if(view.n==="subj") m.innerHTML=subjView();
+  else if(view.n==="quiz") { m.innerHTML=quizView(); const i=$("#ans"); if(i && !run.fb) i.focus(); }
+  else if(view.n==="result") m.innerHTML=resultView();
+  else if(view.n==="maze") m.innerHTML=mazeView();
+  else if(view.n==="teach") m.innerHTML=teachView();
+}
+function go(v){ view=v; render(); window.scrollTo(0,0); }
+
+function homeView(){
+  const p=prof(), into=p.xp%100;
+  const tiles=ORDER.map(id=>{ const s=SUBJECTS[id]; return `<button class="tile" data-a="subj" data-s="${id}" style="--c:var(${s.c})"><span class="g ${s.u?"u":""}">${s.glyph}</span><h3>${s.name}</h3><small>${s.blurb}</small></button>`; }).join("");
+  const badges=Object.keys(BADGES).map(k=>`<span class="badge ${p.badges.includes(k)?"":"off"}" title="${esc(BADGES[k][1])}">${BADGES[k][0]}</span>`).join("");
+  return `
+  <div class="card hello">
+    <h1>Hello, ${esc(state.current)}</h1>
+    <div class="stats"><span><b class="star">★</b>${p.stars} stars</span><span><b>${p.streak}</b>day streak</span><span><b>${p.xp}</b>XP</span></div>
+    <div><div style="display:flex;justify-content:space-between;font-weight:800;margin-bottom:6px"><span>Level ${lvlOf(p.xp)}: ${titleOf(p.xp)}</span><span class="muted">${100-into} XP to next level</span></div><div class="bar"><i style="width:${into}%"></i></div></div>
+    <div class="row" style="justify-content:flex-start"><button class="btn small ghost" data-a="records" data-k="${esc(state.current)}">My records</button><button class="btn small ghost" data-a="kids">Change player</button></div>
+  </div>
+  <div class="card daily">
+    <h2>Daily Challenge</h2>
+    <p>5 questions, one from every subject. Earn 20 bonus XP.</p>
+    <div><button class="btn light" data-a="daily">Start challenge</button></div>
+  </div>
+  <div class="sec-t"><h2>Subjects</h2></div>
+  <div class="grid">${tiles}</div>
+  <div class="sec-t"><h2>Badges</h2><small class="muted">Tap a badge to see how to earn it</small></div>
+  <div class="badges">${badges}</div>
+  <div class="credit"><svg viewBox="0 0 100 100" aria-hidden="true"><polygon fill="#D8431B" points="50,4 58,26 80,14 74,38 98,40 80,56 94,80 68,74 60,98 50,80 40,98 32,74 6,80 20,56 2,40 26,38 20,14 42,26"/></svg><span>Designed by <b>Raies Ahmad Mir</b></span><small>Managing Director, Star Engineering Consultants</small></div>`;
+}
+
+function bestOf(sub,mode){ const b=prof().best[sub+":"+mode]; return b?("Best "+b.s+"/"+b.n):"Not played yet"; }
+function subjView(){
+  const s=SUBJECTS[view.s];
+  const modes=s.modes.map(m=>{
+    const best = m.special==="maze" ? (prof().maze.length+"/"+MAZES.length+" levels") : m.special==="teach" ? "Free play" : bestOf(view.s,m.id);
+    return `<button class="mode" data-a="mode" data-s="${view.s}" data-m="${m.id}" style="--c:var(${s.c})"><span><b>${m.title}</b><span class="muted">${m.desc}</span><br><small class="muted">${best}</small></span><span class="go">Play</span></button>`; }).join("");
+  return `<button class="back" data-a="home">← All subjects</button><h1 style="color:var(${s.c})">${s.name}</h1><div class="list">${modes}</div>`;
+}
+
+function startRun(sub,mode,qs,label){ run={sub,mode,qs,i:0,score:0,opts:null,fb:null,label:label||""}; go({n:"quiz"}); }
+function quizView(){
+  const q=run.qs[run.i], n=run.qs.length;
+  if(q.t==="mc" && !run.opts) run.opts=shuffle(q.o);
+  const prog=`<div class="qhead"><button class="back" data-a="quit" style="min-height:40px">✕ Quit</button><div class="bar"><i style="width:${run.i/n*100}%"></i></div><small>${run.i+1}/${n}</small></div>`;
+  let body=`<div class="qtext">${esc(q.q)}</div>`;
+  if(q.big) body+=`<div class="big ${q.bigu?"u":""} ${q.tiles?"tiles":""}">${esc(q.big)}</div>`;
+  const f=run.fb;
+  if(q.t==="mc"){
+    body+=`<div class="opts">`+run.opts.map((o,i)=>{
+      let c="opt "+(q.ou?"u":"");
+      if(f){ if(o===q.a) c+=" ok"; else if(o===f.val) c+=" no"; else c+=" dim"; }
+      return `<button class="${c}" data-a="pick" data-i="${i}" ${f?"disabled":""}>${esc(o)}</button>`; }).join("")+`</div>`;
+  } else {
+    body+=`<form id="ansform" class="ansrow"><input id="ans" ${q.n?'inputmode="decimal"':'autocapitalize="off" autocomplete="off" spellcheck="false"'} placeholder="${q.ph||"Your answer"}" aria-label="Your answer" ${f?`value="${esc(f.val)}" readonly class="${f.ok?"ok":"no"}"`:""}><button class="btn red" type="submit" ${f?"disabled":""}>Check</button></form>`;
+  }
+  if(f){
+    body+=`<div class="fb ${f.ok?"ok":"no"}">${f.ok?"Correct! ":"Not quite. "+(q.t==="tx"&&!q.n?"The answer is "+esc(q.a)+". ":"")}${esc(q.e)}</div><button class="btn red" data-a="next">${run.i+1<n?"Next question":"See my result"}</button>`;
+  }
+  return prog+`<div class="card qbox">${body}</div>`;
+}
+function answer(val){
+  const q=run.qs[run.i]; if(run.fb) return;
+  let ok;
+  if(q.t==="mc") ok = val===q.a;
+  else if(q.n){ const v=parseFloat(String(val).replace(",",".")); ok = !isNaN(v) && Math.abs(v-parseFloat(q.a))<1e-9; }
+  else ok = String(val).trim().toLowerCase()===q.a.toLowerCase();
+  if(String(val).trim()==="" ) return;
+  run.fb={ok,val}; if(ok) run.score++; sfx(ok?"ok":"bad"); render();
+}
+function runLabels(){ if(run.sub==="daily") return {sub:"All subjects",mode:"Daily Challenge"}; const s=SUBJECTS[run.sub]; return {sub:s.name,mode:s.modes.find(x=>x.id===run.mode).title}; }
+function finishRun(){
+  const n=run.qs.length, s=run.score, p=prof(), pct=s/n;
+  const stars = pct>=.9?3:pct>=.6?2:s>0?1:0;
+  const daily = run.sub==="daily";
+  let xp = s*10 + (pct===1?20:0) + (daily?20:0);
+  const key=run.sub+":"+run.mode;
+  if(!daily){ const b=p.best[key]; if(!b || s>b.s) p.best[key]={s,n}; if(!p.subs.includes(run.sub)) p.subs.push(run.sub); }
+  else { ["english","urdu","maths","science","ai"].forEach(k=>{ if(!p.subs.includes(k)) p.subs.push(k); }); }
+  p.stars+=stars; p.rounds++;
+  if(pct===1 && !p.badges.includes("perfect")) p.badges.push("perfect");
+  const r=addXp(xp);
+  const entry=logRound(Object.assign({s,n,stars,xp},runLabels()));
+  run.res={stars,xp,up:r.up,nb:r.nb,entry}; sfx(stars>=2?"win":"ok");
+  go({n:"result"});
+}
+function resultView(){
+  const r=run.res, n=run.qs.length, s=run.score;
+  const msg = s===n?"Perfect round!":s>=n*.6?"Great work!":"Good try. Practice makes you faster.";
+  return `<div class="card result">
+    <div class="slip"><b>${esc(state.current)}</b><br><small>${esc(r.entry.sub)} · ${esc(r.entry.mode)} · ${fmt(r.entry.d)}</small></div>
+    <div class="stars">${"★".repeat(r.stars)}<span class="off">${"★".repeat(3-r.stars)}</span></div>
+    <div class="score">${s} / ${n}</div>
+    <p>${msg} You earned <b>${r.xp} XP</b>. This result is saved in your records.</p>
+    ${r.up?`<p><b>Level up! You are now Level ${lvlOf(prof().xp)}: ${titleOf(prof().xp)}.</b></p>`:""}
+    ${r.nb.length?`<p>New badge: <b>${r.nb.join(", ")}</b></p>`:""}
+    <div class="row"><button class="btn red" data-a="again">Play again</button><button class="btn" data-a="copyres">Copy result</button></div>
+    <div class="row"><button class="btn ghost" data-a="records" data-k="${esc(state.current)}">My records</button><button class="btn ghost" data-a="${run.sub==="daily"?"home":"back"}">${run.sub==="daily"?"Home":"Back"}</button></div>
+  </div>`;
+}
+
+/* ---------- robot maze ---------- */
+const MAZES = [
+ {g:["R...S",".....",".....",".....","....."],par:1},
+ {g:["R....",".....",".....",".....","....S"],par:2},
+ {g:["R..#.",".#.#.",".#...",".###.","....S"],par:2},
+ {g:["R#...",".#.#.","...#.","##...","S..#."],par:4},
+ {g:["R..#S","##.#.","...#.",".#...",".####"],par:4},
+ {g:["R.#..","#.#.#","....#",".##..","....S"],par:5}
+];
+const DIRS={u:[-1,0],d:[1,0],l:[0,-1],r:[0,1]}, ARW={u:"↑",d:"↓",l:"←",r:"→"};
+function mzLoad(l){ const g=MAZES[l].g; let st={r:0,c:0}, star={r:0,c:0};
+  g.forEach((row,r)=>row.split("").forEach((ch,c)=>{ if(ch==="R") st={r,c}; if(ch==="S") star={r,c}; }));
+  mz={l,prog:[],pos:{...st},start:st,star,running:false,msg:"",won:false}; }
+function mazeView(){
+  const g=MAZES[mz.l].g;
+  const cells=g.map((row,r)=>row.split("").map((ch,c)=>{
+    const isR=mz.pos.r===r&&mz.pos.c===c, isS=mz.star.r===r&&mz.star.c===c;
+    return `<div class="cell ${ch==="#"?"w":isS?"s":""}">${isR?"🤖":isS?"⭐":""}</div>`; }).join("")).join("");
+  const prog=mz.prog.length? mz.prog.map((s,i)=>`<button class="step" data-a="mzinc" data-k="${i}" aria-label="Change count">${ARW[s.d]} ${s.n}</button>`).join("") : `<span class="muted">Tap the arrows below to add steps</span>`;
+  const levels=MAZES.map((_,i)=>`<button class="btn small ${i===mz.l?"red":"ghost"}" data-a="mzlvl" data-l="${i}">${prof().maze.includes(i)?"✓ ":""}${i+1}</button>`).join("");
+  return `<button class="back" data-a="back">← AI & Coding</button>
+  <h1 style="color:var(--ai)">Robot Maze</h1>
+  <p class="muted">Plan the robot's steps, then press Run. Tap a step to repeat it more times (up to 9). Fewer steps is smarter coding. Par for this level: ${MAZES[mz.l].par} step${MAZES[mz.l].par>1?"s":""}.</p>
+  <div class="row" style="justify-content:flex-start">${levels}</div>
+  <div class="maze">${cells}</div>
+  ${mz.msg?`<div class="fb ${mz.won?"ok":"no"}">${mz.msg}</div>`:""}
+  <div class="prog" aria-label="Program">${prog}</div>
+  <div class="pad">${["u","d","l","r"].map(d=>`<button class="btn" data-a="mzdir" data-d="${d}" aria-label="Add ${d}">${ARW[d]}</button>`).join("")}</div>
+  <div class="row"><button class="btn red" data-a="mzrun" ${mz.running?"disabled":""}>Run</button><button class="btn ghost" data-a="mzundo">Undo</button><button class="btn ghost" data-a="mzclear">Clear</button>${mz.won&&mz.l<MAZES.length-1?`<button class="btn" data-a="mzlvl" data-l="${mz.l+1}">Next level</button>`:""}</div>`;
+}
+function mzRun(){
+  if(mz.running||!mz.prog.length) return;
+  mz.running=true; mz.won=false; mz.msg=""; mz.pos={...mz.start};
+  const seq=[]; mz.prog.forEach(s=>{ for(let k=0;k<s.n;k++) seq.push(s.d); });
+  const g=MAZES[mz.l].g; let i=0;
+  const tick=()=>{
+    if(!mz||view.n!=="maze"){return;}
+    if(i>=seq.length){ finish(); return; }
+    const d=DIRS[seq[i++]], nr=mz.pos.r+d[0], nc=mz.pos.c+d[1];
+    if(nr<0||nc<0||nr>4||nc>4||g[nr][nc]==="#"){ mz.running=false; mz.msg="Bump! The robot hit a wall or the edge. Check your steps and try again."; mz.pos={...mz.start}; sfx("bad"); render(); return; }
+    mz.pos={r:nr,c:nc}; sfx("step"); render(); setTimeout(tick,330);
+  };
+  const finish=()=>{
+    mz.running=false;
+    if(mz.pos.r===mz.star.r&&mz.pos.c===mz.star.c){
+      mz.won=true; const p=prof(); const blocks=mz.prog.length; let txt="You reached the star!";
+      logRound({sub:"AI & Coding",mode:"Robot Maze, level "+(mz.l+1),note:"Completed in "+blocks+" step"+(blocks>1?"s":"")+" (par "+MAZES[mz.l].par+")",xp:p.maze.includes(mz.l)?0:30});
+      if(!p.maze.includes(mz.l)){ p.maze.push(mz.l); const bonus=blocks<=MAZES[mz.l].par?15:0; const r=addXp(30+bonus); txt+=" +"+(30+bonus)+" XP"+(bonus?" (bonus for using the fewest steps)":"")+(r.up?". Level up!":"")+(r.nb.length?" New badge: "+r.nb.join(", ")+".":""); }
+      else if(blocks>MAZES[mz.l].par) txt+=" Can you do it in "+MAZES[mz.l].par+" step"+(MAZES[mz.l].par>1?"s":"")+"?";
+      mz.msg=txt; sfx("win");
+    } else { mz.msg="The robot stopped before the star. Add more steps or change the counts."; sfx("bad"); mz.pos={...mz.start}; }
+    render();
+  };
+  render(); setTimeout(tick,250);
+}
+
+/* ---------- teach a robot ---------- */
+const FRUITS=[{e:"🍎",c:"red",s:"round",l:"Apple"},{e:"🍏",c:"green",s:"round",l:"Apple"},{e:"🍌",c:"yellow",s:"long",l:"Banana"},{e:"🍊",c:"orange",s:"round",l:"Orange"},{e:"🥒",c:"green",s:"long",l:"Cucumber"}];
+const LABELS=["Apple","Banana","Orange","Cucumber"];
+function tmGuess(f){
+  const score={}; LABELS.forEach(l=>score[l]=0);
+  tm.data.forEach(d=>{ let s=0; if(d.c===f.c) s++; if(d.s===f.s) s++; score[d.l]+=s; });
+  let best=null,bv=0; LABELS.forEach(l=>{ if(score[l]>bv){bv=score[l];best=l;} }); return best;
+}
+function tmNext(){ tm.cur=FRUITS[ri(0,FRUITS.length-1)]; tm.guess=tmGuess(tm.cur); tm.fb=null; }
+function tmStart(){ tm={data:[],n:0,guessed:0,right:0,done:false}; tmNext(); go({n:"teach"}); }
+function teachView(){
+  if(tm.done){
+    const acc = tm.guessed? Math.round(tm.right/tm.guessed*100):0;
+    return `<div class="card result"><h2>Your robot has learned!</h2><p>It saw <b>${tm.data.length}</b> examples and guessed right <b>${tm.right}</b> out of <b>${tm.guessed}</b> times (${acc}%).</p><p class="muted">The more varied examples an AI sees, the better its guesses become. That is machine learning.</p><p><b>+${tm.xp} XP</b></p><div class="row"><button class="btn red" data-a="tmstart">Train a new robot</button><button class="btn ghost" data-a="back">Back</button></div></div>`;
+  }
+  const f=tm.cur;
+  const say = tm.fb ? tm.fb : (tm.guess? `I think this is a <b>${tm.guess}</b>. Tap its real name to teach me.` : `I have never seen anything like this. What is it? Tap its name to teach me.`);
+  return `<button class="back" data-a="back">← AI & Coding</button>
+  <h1 style="color:var(--ai)">Teach a Robot</h1>
+  <p class="muted">The robot cannot see pictures. It only reads two clues: colour and shape. Tell it the real name each time and watch it get smarter. Item ${Math.min(tm.n+1,12)} of 12.</p>
+  <div class="card qbox">
+    <div class="big">${f.e}</div>
+    <div class="view">robot sees → colour: ${f.c}, shape: ${f.s}</div>
+    <div class="robot"><div class="face">🤖</div><div class="speech">${say}</div></div>
+    ${tm.fb?`<button class="btn red" data-a="tmnext">${tm.n>=12?"Finish":"Next item"}</button>`:`<div class="opts">${LABELS.map(l=>`<button class="opt" data-a="tmpick" data-l="${l}">${l}</button>`).join("")}</div>`}
+    <small class="muted">Examples learned: ${tm.data.length}. Careful: if you teach a wrong name, the robot learns the wrong thing.</small>
+  </div>`;
+}
+function tmPick(l){
+  const f=tm.cur; const truth=f.l; const robotRight = tm.guess ? tm.guess===truth : null;
+  if(tm.guess){ tm.guessed++; if(robotRight) tm.right++; }
+  tm.data.push({c:f.c,s:f.s,l}); tm.n++;
+  let t="";
+  if(tm.guess) t += robotRight ? "I was right! " : `I guessed ${tm.guess}, but I was wrong. `;
+  if(l===truth) t += `Thank you, I learned that ${f.c} and ${f.s} can be a ${l}.`;
+  else t += `Hmm, that is actually a ${truth}. I learned your answer, so now I might make mistakes. Bad examples make bad AI.`;
+  tm.fb=t; sfx(l===truth?"ok":"bad"); render();
+}
+function tmFinish(){ tm.xp=10+tm.right*5; logRound({sub:"AI & Coding",mode:"Teach a Robot",s:tm.right,n:tm.guessed,xp:tm.xp,note:"Robot guessed "+tm.right+" of "+tm.guessed+" right after "+tm.data.length+" examples"}); const r=addXp(tm.xp); const p=prof(); p.stars+= tm.guessed&&tm.right/tm.guessed>=.7?3:tm.guessed&&tm.right/tm.guessed>=.4?2:1; save(); tm.done=true; sfx("win"); if(r.up) toast("Level up!"); render(); }
+
+/* ---------- players, records, sharing ---------- */
+const fmt = d => { try{ return new Date(d).toLocaleString("en-IN",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}); }catch(e){ return String(d); } };
+const starsTxt = k => "★".repeat(k)+"☆".repeat(3-k);
+function logRound(x){ const p=prof(); p.log=p.log||[]; const e=Object.assign({d:new Date().toISOString()},x); p.log.unshift(e); if(p.log.length>500) p.log.length=500; save(); return e; }
+function pctOf(p){ let s=0,n=0; (p.log||[]).forEach(e=>{ if(e.n){s+=e.s;n+=e.n;} }); return n?Math.round(s/n*100):0; }
+function scoreTxt(e){ return e.note ? e.note : (e.n ? e.s+"/"+e.n+(e.stars!=null?"  "+starsTxt(e.stars):"") : ""); }
+function subjectRows(p){ const g={}; (p.log||[]).forEach(e=>{ const o=g[e.sub]=g[e.sub]||{r:0,s:0,n:0,best:0}; o.r++; if(e.n){ o.s+=e.s; o.n+=e.n; o.best=Math.max(o.best,Math.round(e.s/e.n*100)); } }); return g; }
+function resultText(name,e){ return "Chinar Academy result\nName: "+name+"\nSubject: "+e.sub+" ("+e.mode+")\nScore: "+scoreTxt(e)+"\nXP earned: "+e.xp+"\nDate: "+fmt(e.d); }
+function reportText(k){
+  const p=state.profiles[k], rows=subjectRows(p);
+  let t="Chinar Academy report\nName: "+k+"\nLevel "+lvlOf(p.xp)+" ("+titleOf(p.xp)+"), "+p.xp+" XP, "+p.stars+" stars, "+p.streak+" day streak\nRounds played: "+(p.log||[]).length+", overall accuracy "+pctOf(p)+"%\n\nBy subject:\n";
+  Object.keys(rows).forEach(s=>{ const o=rows[s]; t+="- "+s+": "+o.r+" rounds"+(o.n?", accuracy "+Math.round(o.s/o.n*100)+"%, best "+o.best+"%":"")+"\n"; });
+  t+="\nRecent rounds:\n"+(p.log||[]).slice(0,20).map(e=>fmt(e.d)+" | "+e.sub+" | "+e.mode+" | "+scoreTxt(e)).join("\n");
+  return t;
+}
+function showModal(html){ const m=$("#modal"); m.innerHTML='<div class="sheet" role="dialog">'+html+'</div>'; m.hidden=false; }
+function closeModal(){ $("#modal").hidden=true; }
+async function copyText(t){
+  try{ await navigator.clipboard.writeText(t); toast("Copied. Paste it into WhatsApp or a note."); }
+  catch(e){ showModal('<h2>Copy this text</h2><textarea id="copybox" rows="10" readonly>'+esc(t)+'</textarea><button class="btn ghost" data-a="closemodal">Close</button>'); const b=$("#copybox"); if(b){ b.focus(); b.select(); } }
+}
+function welcomeView(){
+  const names=Object.keys(state.profiles);
+  const list=names.map(k=>{ const p=state.profiles[k]; return `<button class="kid" data-a="login" data-k="${esc(k)}"><span><b>${esc(k)}</b><br><small class="muted">Level ${lvlOf(p.xp)} · ${p.stars} stars · ${(p.log||[]).length} rounds</small></span><span>Continue</span></button>`; }).join("");
+  return `<div class="card qbox"><h1>Welcome to Chinar Academy</h1><p class="muted">Type your name to start. Every result you earn is saved under your name.</p>
+    <form id="welcomeform" class="ansrow"><input id="pname" maxlength="16" placeholder="Your name" aria-label="Your name" autocomplete="off"><button class="btn red" type="submit">Start</button></form></div>
+    ${names.length?`<div class="sec-t"><h2>Already playing? Tap your name</h2></div><div class="list">${list}</div><button class="btn ghost" data-a="records" data-k="">See all records</button>`:""}
+    <div class="credit"><svg viewBox="0 0 100 100" aria-hidden="true"><polygon fill="#D8431B" points="50,4 58,26 80,14 74,38 98,40 80,56 94,80 68,74 60,98 50,80 40,98 32,74 6,80 20,56 2,40 26,38 20,14 42,26"/></svg><span>Designed by <b>Raies Ahmad Mir</b></span><small>Managing Director, Star Engineering Consultants</small></div>`;
+}
+function recordsView(){
+  const names=Object.keys(state.profiles).sort((a,b)=>state.profiles[b].xp-state.profiles[a].xp);
+  if(!names.length) return `<button class="back" data-a="home">← Back</button><h1>Records</h1><div class="card">No players yet. Type a name on the welcome screen to start.</div><button class="btn red" data-a="kids">Go to welcome screen</button>`;
+  const k = view.k && state.profiles[view.k] ? view.k : (state.current && state.profiles[state.current] ? state.current : names[0]);
+  const p=state.profiles[k], rows=subjectRows(p);
+  const board=names.map((nm,i)=>{ const q=state.profiles[nm]; return `<button class="kid ${nm===k?"on":""}" data-a="records" data-k="${esc(nm)}"><span><b>${i+1}. ${esc(nm)}</b><br><small class="muted">Level ${lvlOf(q.xp)} · ${q.xp} XP · ${q.stars} stars · accuracy ${pctOf(q)}%</small></span><span>View</span></button>`; }).join("");
+  const subj=Object.keys(rows).map(s=>{ const o=rows[s]; return `<tr><td>${esc(s)}</td><td>${o.r}</td><td>${o.n?Math.round(o.s/o.n*100)+"%":"-"}</td><td>${o.n?o.best+"%":"-"}</td></tr>`; }).join("");
+  const hist=(p.log||[]).slice(0,30).map(e=>`<div class="hrow"><div><b>${esc(e.sub)}</b> · ${esc(e.mode)}<br><small class="muted">${fmt(e.d)}</small></div><div class="hs">${esc(scoreTxt(e))}<br><small class="muted">+${e.xp||0} XP</small></div></div>`).join("");
+  return `<button class="back" data-a="${state.current?"home":"kids"}">← Back</button>
+  <h1>Records</h1>
+  <div class="sec-t"><h2>All players</h2></div><div class="list">${board}</div>
+  <div class="card qbox"><h2>${esc(k)}</h2>
+    <div class="stats"><span><b>${lvlOf(p.xp)}</b>level</span><span><b class="star">★</b>${p.stars}</span><span><b>${(p.log||[]).length}</b>rounds</span><span><b>${pctOf(p)}%</b>accuracy</span></div>
+    ${subj?`<div class="tblwrap"><table class="tbl"><thead><tr><th>Subject</th><th>Rounds</th><th>Average</th><th>Best</th></tr></thead><tbody>${subj}</tbody></table></div>`:`<p class="muted">No rounds played yet.</p>`}
+    <h3>Recent rounds</h3>${hist||`<p class="muted">Nothing saved yet.</p>`}
+    <div class="row" style="justify-content:flex-start"><button class="btn" data-a="copyrep" data-k="${esc(k)}">Copy report</button>${view.del?`<button class="btn red" data-a="deldo" data-k="${esc(k)}">Yes, delete ${esc(k)}</button><button class="btn ghost" data-a="delcancel">Cancel</button>`:`<button class="btn ghost" data-a="delask">Remove player</button>`}</div>
+    ${view.del?`<div class="fb no">This deletes all records of ${esc(k)} on this device. It cannot be undone.</div>`:""}
+  </div>
+  <div class="card qbox"><h3>Backup</h3><p class="muted">Records live in this browser only. Copy a backup now and then, and keep it in a note or WhatsApp. Restore it on any device.</p>
+    <div class="row" style="justify-content:flex-start"><button class="btn ghost" data-a="copybackup">Copy backup</button><button class="btn ghost" data-a="restore">Restore backup</button></div></div>`;
+}
+function restoreBackup(txt){
+  try{ const d=JSON.parse(txt.trim()); if(!d||!d.profiles) throw 0; let c=0;
+    Object.keys(d.profiles).forEach(k=>{ const inc=d.profiles[k]; inc.log=inc.log||[]; const ex=state.profiles[k]; if(!ex || (inc.log.length>(ex.log||[]).length) || inc.xp>ex.xp){ state.profiles[k]=Object.assign(newProfile(),inc); c++; } });
+    save(); closeModal(); toast("Restored "+c+" player"+(c===1?"":"s")); render();
+  }catch(e){ toast("That backup text could not be read"); }
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-a]"); if(!b) return; const a=b.dataset.a;
+  if(a==="home") { run=null; go({n:"home"}); }
+  else if(a==="subj") go({n:"subj",s:b.dataset.s});
+  else if(a==="mode"){ const s=SUBJECTS[b.dataset.s], m=s.modes.find(x=>x.id===b.dataset.m);
+    if(m.special==="maze"){ mzLoad(Math.min(prof().maze.length,MAZES.length-1)); go({n:"maze"}); }
+    else if(m.special==="teach") tmStart();
+    else startRun(b.dataset.s,m.id,m.gen()); }
+  else if(a==="daily") startRun("daily","daily",dailyQs());
+  else if(a==="pick") answer(run.opts[+b.dataset.i]);
+  else if(a==="next"){ if(run.i+1<run.qs.length){ run.i++; run.opts=null; run.fb=null; render(); window.scrollTo(0,0);} else finishRun(); }
+  else if(a==="quit"){ const s=run.sub; run=null; go(s==="daily"?{n:"home"}:{n:"subj",s}); }
+  else if(a==="again"){ if(run.sub==="daily") startRun("daily","daily",dailyQs()); else { const m=SUBJECTS[run.sub].modes.find(x=>x.id===run.mode); startRun(run.sub,run.mode,m.gen()); } }
+  else if(a==="back"){ const s = run?run.sub:"ai"; if(view.n==="maze"||view.n==="teach") go({n:"subj",s:"ai"}); else go({n:"subj",s}); }
+  else if(a==="mzdir"){ if(mz.running) return; const d=b.dataset.d, last=mz.prog[mz.prog.length-1]; if(last&&last.d===d&&last.n<9) last.n++; else mz.prog.push({d,n:1}); mz.msg=""; mz.pos={...mz.start}; sfx("step"); render(); }
+  else if(a==="mzinc"){ if(mz.running) return; const s=mz.prog[+b.dataset.k]; s.n = s.n>=9?1:s.n+1; render(); }
+  else if(a==="mzundo"){ if(mz.running) return; mz.prog.pop(); mz.msg=""; mz.pos={...mz.start}; render(); }
+  else if(a==="mzclear"){ if(mz.running) return; mz.prog=[]; mz.msg=""; mz.pos={...mz.start}; render(); }
+  else if(a==="mzrun") mzRun();
+  else if(a==="mzlvl"){ if(mz.running) return; mzLoad(+b.dataset.l); render(); }
+  else if(a==="tmpick") tmPick(b.dataset.l);
+  else if(a==="tmnext"){ if(tm.n>=12) tmFinish(); else { tmNext(); render(); } }
+  else if(a==="tmstart") tmStart();
+  else if(a==="kids"){ run=null; go({n:"welcome"}); }
+  else if(a==="login"){ state.current=b.dataset.k; save(); run=null; go({n:"home"}); }
+  else if(a==="records") go({n:"records",k:b.dataset.k||null});
+  else if(a==="copyres") copyText(resultText(state.current,run.res.entry));
+  else if(a==="copyrep") copyText(reportText(b.dataset.k));
+  else if(a==="copybackup") copyText(JSON.stringify({v:1,profiles:state.profiles}));
+  else if(a==="restore") showModal('<h2>Restore backup</h2><p class="muted">Paste the backup text you copied earlier.</p><textarea id="restorebox" rows="8" aria-label="Backup text"></textarea><div class="row"><button class="btn red" data-a="dorestore">Restore</button><button class="btn ghost" data-a="closemodal">Cancel</button></div>');
+  else if(a==="dorestore") restoreBackup($("#restorebox").value);
+  else if(a==="closemodal") closeModal();
+  else if(a==="delask"){ view.del=true; render(); }
+  else if(a==="delcancel"){ view.del=false; render(); }
+  else if(a==="deldo"){ const k=b.dataset.k; delete state.profiles[k]; if(state.current===k) state.current=null; save(); toast(k+" removed"); go(state.current?{n:"records",k:state.current}:{n:"welcome"}); }
+  else if(a==="mute"){ state.mute=!state.mute; save(); render(); }
+});
+document.addEventListener("submit",e=>{
+  e.preventDefault();
+  if(e.target.id==="ansform"){ answer($("#ans").value); }
+  else if(e.target.id==="welcomeform"){
+    const n=$("#pname").value.trim().replace(/\s+/g," ").slice(0,16);
+    if(!n){ toast("Please type your name"); return; }
+    const ex=Object.keys(state.profiles).find(k=>k.toLowerCase()===n.toLowerCase()), key=ex||n;
+    if(!ex) state.profiles[key]=newProfile();
+    state.current=key; save(); run=null; go({n:"home"}); if(ex) toast("Welcome back, "+key);
+  }
+});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
+$("#modal").addEventListener("click",e=>{ if(e.target.id==="modal") closeModal(); });
+document.addEventListener("click",e=>{ const b=e.target.closest(".badge"); if(b && b.title) toast(b.title); });
+
+/* ---------- boot ---------- */
+const hot = window.claude && window.claude.hot;
+if(hot && hot.snapshot) hot.snapshot(()=>({state}));
+const start = d => { if(d && d.state && d.state.profiles){ state=d.state; fixState(); } render(); };
+if(hot && hot.ready) hot.ready(start); else start((hot && hot.data) || {});
+</script>
+</body>
+</html>
